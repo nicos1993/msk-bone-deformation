@@ -12,20 +12,20 @@ import utils.saveDeformedModel
 
 #---------------  MAIN SETTINGS ---------------
 # Model to deform
-modelFileName = './examples_gait2392_SteeringCommittee/gait2392_simbody_TorsFem_r_Prox80Dist0Deg.osim'
+modelFileName = './examples_gait2392/gait2392_simbody.osim'
 
 # where the bone geometries are stored
 OpenSim_Geometry_folder = 'C:/OpenSim 4.5/Geometry'
 
 # body to deform
-bone_to_deform = 'tibia_r'
+bone_to_deform = 'femur_r'
 
 # axis of deformation
 torsionAxis = 'y'
 
 # define the rotational profile at the joint centres of the bone of
 # interest: TorsionProfilePointsDeg = [ proximalTorsion DistalTorsion ];
-TorsionProfilePointsDeg = (0, 30)
+TorsionProfilePointsDeg = (40, 0)
 
 # decide if you want to apply torsion to joint as well as other objects.
 # E.g. choose no for investigating the effect of femoral anteversion in a
@@ -35,11 +35,10 @@ TorsionProfilePointsDeg = (0, 30)
 apply_torsion_to_joints = 'yes'
 
 # where the deformed models will be saved
-altered_models_folder = './examples_gait2392_SteeringCommittee'
+altered_models_folder = './examples_gait2392'
 #----------------------------------------------
 
 # import model
-#osim.ModelVisualizer.addDirToGeometrySearchPaths(OpenSim_Geometry_folder) # prevents errors related to missing geometries
 osimModel = osim.Model(modelFileName)
 
 # compute bone length
