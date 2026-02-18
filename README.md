@@ -7,7 +7,7 @@
 - [Requirements and setup](#requirements-and-setup)
 - [How to use the bone deformation tool](#how-to-use-the-bone-deformation-tool)
 - [How the bone deformation tool works](#how-the-bone-deformation-tool-works)
-- [Which models can I deform with this MATLAB tool?](#which-models-can-i-deform-with-this-matlab-tool)
+- [Which models can I deform with this tool?](#which-models-can-i-deform-with-this-tool)
 - [Definition of femoral version and tibial torsion angles](#definition-of-femoral-version-and-tibial-torsion-angles)
   - [Baseline angles for the Rajagopal full body model](#baseline-angles-for-the-rajagopal-full-body-model)
 - [Examples of use](#examples-of-use)
