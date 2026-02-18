@@ -76,7 +76,7 @@ The bone deformation tool will execute the following operations:
 4. rotate the joints axes according to the specified torsional profile if the user decides to do that (see examples below). This will modify the kinematic model.
 5. generate a new OpenSim model that includes all the previous modifications.
 
-# Which models can I deform with this MATLAB tool?
+# Which models can I deform with this tool?
 
 We tested the MATLAB tool with two popular lower limb models: 
 * the `gait2392` model distributed with OpenSim 
@@ -84,6 +84,8 @@ We tested the MATLAB tool with two popular lower limb models:
 The latter model was used in the publication associated with this repository and to produce the images in this document.
 
 Please consider that the formulation of the tool is however **completely generic** in its managing the OpenSim model components, so nothing prevents you from testing it on other bones and models, including upper limb models.
+
+We also tested the Python version of this tool with the same models listed above.
 
 # Definition of femoral version and tibial torsion angles
 
@@ -188,6 +190,11 @@ We have provided example scripts that demonstrate how to modify the geometry of 
 * [`Example_deform_distal_femur_Rajagopal.m`](Example_deform_distal_femur_Rajagopal.m)
 * [`Example_deform_distal_tibia_gait2392.m`](Example_deform_distal_tibia_gait2392.m)
 * [`Example_deform_distal_tibia_Rajagopal.m`](Example_deform_distal_tibia_Rajagopal.m)
+
+* [`Example_deform_distal_femur_gait2392.py`](Example_deform_distal_femur_gait2392.py)
+* [`Example_deform_distal_femur_Rajagopal.py`](Example_deform_distal_femur_Rajagopal.py)
+* [`Example_deform_distal_tibia_gait2392.py`](Example_deform_distal_tibia_gait2392.py)
+* [`Example_deform_distal_tibia_Rajagopal.py`](Example_deform_distal_tibia_Rajagopal.py)
 
 The models resulting from these scripts, together with the bone geometries for visualizing the Rajagopal model, are available in the [`examples'](./examples) folder.
 
