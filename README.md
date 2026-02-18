@@ -21,9 +21,9 @@
 
 # Bone deformation tool
 
-This repository is used for sharing a MATLAB toolbox that enables researcher in biomechanics to modify their generic musculoskeletal models by applying arbitrary torsional profiles to the long axis of the bone model.
+This repository is used for sharing a MATLAB & Python toolbox that enables researcher in biomechanics to modify their generic musculoskeletal models by applying arbitrary torsional profiles to the long axis of the bone model.
 
-The MATLAB tool works with musculoskeletal models in the format provided for the software for biomechanical analyses [OpenSim](https://opensim.stanford.edu/).
+The tool works with musculoskeletal models in the format provided for the software for biomechanical analyses [OpenSim](https://opensim.stanford.edu/).
 
 The tool is introduced and described in the following publication, which we invite you to cite if you are using the content of this repository for your research or teaching:
 
@@ -42,7 +42,7 @@ The tool is introduced and described in the following publication, which we invi
 The [paper is open access](https://doi.org/10.1016/j.gaitpost.2021.06.014) and all the materials and scripts used for that manuscript are available at [this repository](https://github.com/modenaxe/femoral-anteversion-paper). 
 Please note that version of the tool used in the reproducibility repository is [v0.1](https://github.com/modenaxe/msk-bone-deformation/releases/tag/v0.1), while the latest version is always recommended for new users.
 
-# Requirements and setup
+# Requirements and setup - MATLAB
 
 In order to use the bone deformation tool you will need to:
 1. download [OpenSim 4.1](https://simtk.org/projects/opensim) or more recent. OpenSim 3.3 is also supported but the examples refer to the latest version.
@@ -50,6 +50,12 @@ In order to use the bone deformation tool you will need to:
 3. set up the OpenSim API (Application User Interface) for MATLAB. Please refer to the OpenSim [documentation](https://simtk-confluence.stanford.edu/display/OpenSim/Scripting+with+Matlab).
 
 The tool should be able to detect the version of your installed OpenSim API automatically, so you do not have to modify anything related to this toolbox if you are using OpenSim 3.3.
+
+# Requirements and setup - Python
+1. Create a clean new conda environment: `conda create --name my_deformation_tool_env python=3.12`
+2. Activate environment: `conda activate my_deformation_tool_env`
+3. Install the requirements: `pip install -r requirements.txt`
+4. Use your favourite interactive development environment to edit and run scripts (e.g., Microsoft Studio Code)
 
 # How to use the bone deformation tool
 
@@ -70,7 +76,7 @@ The bone deformation tool will execute the following operations:
 4. rotate the joints axes according to the specified torsional profile if the user decides to do that (see examples below). This will modify the kinematic model.
 5. generate a new OpenSim model that includes all the previous modifications.
 
-# Which models can I deform with this MATLAB tool?
+# Which models can I deform with this tool?
 
 We tested the MATLAB tool with two popular lower limb models: 
 * the `gait2392` model distributed with OpenSim 
@@ -78,6 +84,8 @@ We tested the MATLAB tool with two popular lower limb models:
 The latter model was used in the publication associated with this repository and to produce the images in this document.
 
 Please consider that the formulation of the tool is however **completely generic** in its managing the OpenSim model components, so nothing prevents you from testing it on other bones and models, including upper limb models.
+
+We also tested the Python version of this tool with the same models listed above.
 
 # Definition of femoral version and tibial torsion angles
 
@@ -182,6 +190,11 @@ We have provided example scripts that demonstrate how to modify the geometry of 
 * [`Example_deform_distal_femur_Rajagopal.m`](Example_deform_distal_femur_Rajagopal.m)
 * [`Example_deform_distal_tibia_gait2392.m`](Example_deform_distal_tibia_gait2392.m)
 * [`Example_deform_distal_tibia_Rajagopal.m`](Example_deform_distal_tibia_Rajagopal.m)
+
+* [`Example_deform_distal_femur_gait2392.py`](Example_deform_distal_femur_gait2392.py)
+* [`Example_deform_distal_femur_Rajagopal.py`](Example_deform_distal_femur_Rajagopal.py)
+* [`Example_deform_distal_tibia_gait2392.py`](Example_deform_distal_tibia_gait2392.py)
+* [`Example_deform_distal_tibia_Rajagopal.py`](Example_deform_distal_tibia_Rajagopal.py)
 
 The models resulting from these scripts, together with the bone geometries for visualizing the Rajagopal model, are available in the [`examples'](./examples) folder.
 
