@@ -52,9 +52,9 @@ In order to use the bone deformation tool you will need to:
 The tool should be able to detect the version of your installed OpenSim API automatically, so you do not have to modify anything related to this toolbox if you are using OpenSim 3.3.
 
 # Requirements and setup - Python
-1. Create a clean new conda environment: conda create --name my_deformation_tool_env python=3.12
-2. Activate environment: conda activate my_deformation_tool_env
-3. Install the requirements: pip install -r requirements.txt
+1. Create a clean new conda environment: ```conda create --name my_deformation_tool_env python=3.12
+2. Activate environment: ```conda activate my_deformation_tool_env
+3. Install the requirements: ```pip install -r requirements.txt
 4. Use your favourite interactive development environment to edit and run scripts (e.g., Microsoft Studio Code)
 
 # How to use the bone deformation tool
