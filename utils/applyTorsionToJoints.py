@@ -63,6 +63,9 @@ def applyTorsionToJoints(osimModel, bone_to_deform, aStringAxis, torsion_angle_f
     XYZ_orient_vec = np.array([orientation.get(0), orientation.get(1), orientation.get(2)])
     
     jointRotMat = orientation2MatRot(XYZ_orient_vec)
+    newJointRotMat =  jointRotMat @ torsion_RotMat
+    new_Orientation  = computeXYZAngleSeq(newJointRotMat)
+    newOrientation = osim.Vec3(new_Orientation[0], new_Orientation[1], new_Orientation[2])
 
     R_Rod = orientationRodrigues(jointRotMat, axis_ind, tors_angle) 
     R_final = jointRotMat @ R_Rod
@@ -133,9 +136,9 @@ def applyTorsionToJoints(osimModel, bone_to_deform, aStringAxis, torsion_angle_f
         XYZ_orient_vec = np.array([orientation.get(0), orientation.get(1), orientation.get(2)])
         jointRotMat = orientation2MatRot(XYZ_orient_vec)
         
-        #newJointRotMat =  jointRotMat @ torsion_RotMat
-        #new_OrientationInPar  = computeXYZAngleSeq(newJointRotMat)
-        #newOrientationInParent = osim.Vec3(new_OrientationInPar[0], new_OrientationInPar[1], new_OrientationInPar[2])
+        newJointRotMat =  jointRotMat @ torsion_RotMat
+        new_OrientationInPar_old  = computeXYZAngleSeq(newJointRotMat)
+        newOrientationInParent_old = osim.Vec3(new_OrientationInPar_old[0], new_OrientationInPar_old[1], new_OrientationInPar_old[2])
 
         # get the axis of rotation in the local frame of the body
         #body_vert_in_local = jointRotMat[axis_ind,:]
