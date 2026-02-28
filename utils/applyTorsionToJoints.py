@@ -50,6 +50,7 @@ def applyTorsionToJoints(osimModel, bone_to_deform, aStringAxis, torsion_angle_f
 
     # NOTE: no need to check for CustomJoint here, as the child is not affected
     # by the SpatialTransform, which moves the child wrt the parent.
+    # terribly hard coded here for the time being
     tors_angle = torsion_angle_func_rad(XYZ_location_vec[axis_ind] - -0.0035348)
     torsion_RotMat = aRotMatFunc(tors_angle[0])
     print('    torsion of ', str(tors_angle[0]*180/np.pi), ' deg applied.')
@@ -118,6 +119,7 @@ def applyTorsionToJoints(osimModel, bone_to_deform, aStringAxis, torsion_angle_f
         XYZ_location_torsion = XYZ_location_vec+jointOffset
 
         # actually compute the matrix
+        # terribly hard coded here
         tors_angle = torsion_angle_func_rad(XYZ_location_torsion[axis_ind] - -0.0035348)
         torsion_RotMat = aRotMatFunc(tors_angle[0])
         print('    torsion of ', str(tors_angle[0]*180/np.pi), ' deg applied.')
@@ -133,15 +135,20 @@ def applyTorsionToJoints(osimModel, bone_to_deform, aStringAxis, torsion_angle_f
         new_OrientationInPar  = computeXYZAngleSeq(newJointRotMat)
         newOrientationInParent = osim.Vec3(new_OrientationInPar[0], new_OrientationInPar[1], new_OrientationInPar[2])
 
+        # get the axis of rotation in the local frame of the body
         body_vert_in_local = jointRotMat[axis_ind,:]
-        tors_angle 
+        tors_angle
+        # separate the components of the axis of rotation in the local frame of the body 
         ux, uy, uz = body_vert_in_local[0], body_vert_in_local[1], body_vert_in_local[2]
+        # identity matrix for Rodrigues' formula
         I = np.eye(3)
+        # skew-symmetric matrix for Rodrigues' formula
         K = np.array([
             [0, -uz, uy],
             [uz, 0, -ux],
             [-uy, ux, 0]
             ])
+        # compute the rotation matrix using Rodrigues' formula
         R_rod = I + np.sin(tors_angle) * K + (1 - np.cos(tors_angle)) * (K @ K)
         R_final = jointRotMat @ R_rod
         new_OrientationInPar_rod = computeXYZAngleSeq(R_final)
