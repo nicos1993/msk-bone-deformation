@@ -133,12 +133,27 @@ def applyTorsionToJoints(osimModel, bone_to_deform, aStringAxis, torsion_angle_f
         new_OrientationInPar  = computeXYZAngleSeq(newJointRotMat)
         newOrientationInParent = osim.Vec3(new_OrientationInPar[0], new_OrientationInPar[1], new_OrientationInPar[2])
 
+        body_vert_in_local = jointRotMat[axis_ind,:]
+        tors_angle 
+        ux, uy, uz = body_vert_in_local[0], body_vert_in_local[1], body_vert_in_local[2]
+        I = np.eye(3)
+        K = np.array([
+            [0, -uz, uy],
+            [uz, 0, -ux],
+            [-uy, ux, 0]
+            ])
+        R_rod = I + np.sin(tors_angle) * K + (1 - np.cos(tors_angle)) * (K @ K)
+        R_final = jointRotMat @ R_rod
+        new_OrientationInPar_rod = computeXYZAngleSeq(R_final)
+        newOrientationInParent_rod = osim.Vec3(new_OrientationInPar_rod[0], new_OrientationInPar_rod[1], new_OrientationInPar_rod[2])
+
+
         # assign new parameters
         if OpenSimVersion<4.0:
             curDistJoint.setOrientationInParent(newOrientationInParent)
             curDistJoint.setLocationInParent(newLocationInParent)
         else:
-            curDistJoint.get_frames(0).set_orientation(newOrientationInParent)
+            curDistJoint.get_frames(0).set_orientation(newOrientationInParent_rod)
             curDistJoint.get_frames(0).set_translation(newLocationInParent)
 
     return osimModel
