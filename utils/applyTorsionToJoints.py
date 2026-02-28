@@ -51,7 +51,6 @@ def applyTorsionToJoints(osimModel, bone_to_deform, aStringAxis, torsion_angle_f
 
     # NOTE: no need to check for CustomJoint here, as the child is not affected
     # by the SpatialTransform, which moves the child wrt the parent.
-    # terribly hard coded here for the time being
     tors_angle = torsion_angle_func_rad(XYZ_location_vec[axis_ind] - location.get(axis_ind)) # subtract the offset if none zero => otherwise some 'torsion' at the proxJoint location which I don't think is intended...
     torsion_RotMat = aRotMatFunc(tors_angle[0])
     print('    torsion of ', str(tors_angle[0]*180/np.pi), ' deg applied.')
@@ -64,8 +63,10 @@ def applyTorsionToJoints(osimModel, bone_to_deform, aStringAxis, torsion_angle_f
     XYZ_orient_vec = np.array([orientation.get(0), orientation.get(1), orientation.get(2)])
     
     jointRotMat = orientation2MatRot(XYZ_orient_vec)
-    newJointRotMat =  jointRotMat @ torsion_RotMat
-    new_Orientation  = computeXYZAngleSeq(newJointRotMat)
+
+    R_Rod = orientationRodrigues(jointRotMat, axis_ind, tors_angle) 
+    R_final = jointRotMat @ R_Rod
+    new_Orientation = computeXYZAngleSeq(R_final)
     newOrientation = osim.Vec3(new_Orientation[0], new_Orientation[1], new_Orientation[2])
 
     # assign params
@@ -112,7 +113,7 @@ def applyTorsionToJoints(osimModel, bone_to_deform, aStringAxis, torsion_angle_f
         if curDistJoint.getConcreteClassName() == 'CustomJoint':
             # offset from the spatial transform
             # this is in parent, which is the bone of interest
-            jointOffset = computeSpatialTransformTranslations(osimModel, curDistJoint);
+            jointOffset = computeSpatialTransformTranslations(osimModel, curDistJoint)
             print('    spatialTransf-transl   : ', f"{jointOffset[0]:.2f} {jointOffset[1]:.2f} {jointOffset[2]:.2f}")
             print('    location in parent (initSystem) : ', f"{jointOffset[0]:.2f} {jointOffset[1]:.2f} {jointOffset[2]:.2f}")
         
@@ -120,7 +121,6 @@ def applyTorsionToJoints(osimModel, bone_to_deform, aStringAxis, torsion_angle_f
         XYZ_location_torsion = XYZ_location_vec+jointOffset
 
         # actually compute the matrix
-        # terribly hard coded here
         tors_angle = torsion_angle_func_rad(XYZ_location_torsion[axis_ind] - location.get(axis_ind)) # subtract the offset if none zero => otherwise 'torsion' at the distalJoint location does not match desired 'torsion' bound
         torsion_RotMat = aRotMatFunc(tors_angle[0])
         print('    torsion of ', str(tors_angle[0]*180/np.pi), ' deg applied.')
