@@ -48,10 +48,12 @@ def applyTorsionToJoints(osimModel, bone_to_deform, aStringAxis, torsion_angle_f
     
     # compute the torsion matrix for proximal joint
     XYZ_location_vec =  np.array([location.get(0), location.get(1), location.get(2)])
+    
+    ref_loc_prox = XYZ_location_vec[axis_ind]
 
     # NOTE: no need to check for CustomJoint here, as the child is not affected
     # by the SpatialTransform, which moves the child wrt the parent.
-    tors_angle = torsion_angle_func_rad(XYZ_location_vec[axis_ind] - location.get(axis_ind)) # subtract the offset if none zero => otherwise some 'torsion' at the proxJoint location which I don't think is intended...
+    tors_angle = torsion_angle_func_rad(XYZ_location_vec[axis_ind] - ref_loc_prox) # subtract the offset if none zero => otherwise some 'torsion' at the proxJoint location which I don't think is intended...
     torsion_RotMat = aRotMatFunc(tors_angle[0])
     print('    torsion of ', str(tors_angle[0]*180/np.pi), ' deg applied.')
 
@@ -124,7 +126,7 @@ def applyTorsionToJoints(osimModel, bone_to_deform, aStringAxis, torsion_angle_f
         XYZ_location_torsion = XYZ_location_vec+jointOffset
 
         # actually compute the matrix
-        tors_angle = torsion_angle_func_rad(XYZ_location_torsion[axis_ind] - location.get(axis_ind)) # subtract the offset if none zero => otherwise 'torsion' at the distalJoint location does not match desired 'torsion' bound
+        tors_angle = torsion_angle_func_rad(XYZ_location_torsion[axis_ind] - ref_loc_prox) # subtract the offset if none zero => otherwise 'torsion' at the distalJoint location does not match desired 'torsion' bound
         torsion_RotMat = aRotMatFunc(tors_angle[0])
         print('    torsion of ', str(tors_angle[0]*180/np.pi), ' deg applied.')
 
