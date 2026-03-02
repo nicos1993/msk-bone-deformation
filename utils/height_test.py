@@ -1,7 +1,7 @@
 import opensim as osim
 
 # Load your modified model
-model = osim.Model('./examples_Rajagopal2015/Rajagopal2015_TorsTib_l_Prox0Dist-30Deg.osim')
+model = osim.Model('./examples_Rajagopal2015/Rajagopal2015_TorsTib_l_Prox1Dist83Deg.osim')
 state = model.initSystem()
 
 # Get the bodies
