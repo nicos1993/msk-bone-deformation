@@ -16,15 +16,15 @@ import utils.saveDeformedModel
 def_tt = 29
 
 # default femur anteversion:
-def_fa = 14
+def_fa = -14
 
 # define offsets to give desired torsion/anteversion values
-offset_tt = np.array([-17, -9, 0, 11, 24])
-offset_fa = np.array([-13, 0, 14, 24, 34])
+offset_tt = np.array([-17, -9, 11, 24])
+offset_fa = np.array([13, -14, -24, -34])
 
 #---------------  MAIN SETTINGS ---------------
 # Model to deform
-modelFileName = './models_Miller/model_31d84m_TorsTib_r_Prox0Dist-29Deg.osim'
+modelFileName = './models_Miller/model_31d84m.osim'
 
 # where the bone geometries are stored
 OpenSim_Geometry_folder = './models_Miller/Geometry'
@@ -49,7 +49,7 @@ elif bone_to_deform == 'femur_r':
 for k in range(offsets.size):
 
     # desired deformation to apply
-    offset = reference + offsets[k]
+    offset = offsets[k]
 
     # define the rotational profile at the joint centres of the bone of
     # interest: TorsionProfilePointsDeg = [ proximalTorsion DistalTorsion ];
