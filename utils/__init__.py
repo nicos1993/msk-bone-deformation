@@ -12,3 +12,4 @@ from .applyTorsionToMuscleAttachments import applyTorsionToMuscleAttachments
 from .applyTorsionToMarkers import applyTorsionToMarkers
 from .saveDeformedModel import saveDeformedModel
 from .applyTorsionToWrappingSurface import applyTorsionToWrappingSurface    
+from .applyAngulationToJoints import applyAngulationToJoints
