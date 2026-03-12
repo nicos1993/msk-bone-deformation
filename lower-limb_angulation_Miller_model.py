@@ -17,7 +17,7 @@ import utils.applyAngulationToJoints
 modelFileName = './models_Miller/model_31d84m.osim'
 
 # joints to apply angulation to
-joints_to_angulate = 'hip_r','knee_r','patellofemoral_r','ankle_r'
+joints_to_angulate = 'hip_r','knee_r','patellofemoral_r','ankle_r','hip_l','knee_l','patellofemoral_l','ankle_l'
 
 # axis of angulation
 angulationAxis = 'x'

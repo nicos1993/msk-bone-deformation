@@ -22,10 +22,14 @@ def applyAngulationToJoints(osimModel, joints_to_angulate, angulationAxis, angul
 
     for joint_name in joints_to_angulate:
 
-        if joint_name in ['hip_r','hip_l','ankle_r','ankle_l']:
+        if joint_name in ['hip_r','ankle_r']:
             angulationDeg_apply = - (angulationDeg / 2) # for hip and ankle, we apply half the angulation to each of the two joints applied in opposite directions
-        else:
+        elif joint_name in ['hip_l','ankle_l']:
+            angulationDeg_apply = (angulationDeg / 2)
+        elif joint_name in ['knee_r','patellofemoral_r']:
             angulationDeg_apply = angulationDeg
+        elif joint_name in ['knee_l','patellofemoral_l']:
+            angulationDeg_apply = -angulationDeg
         
         joint = osimModel.getJointSet().get(joint_name)
 
