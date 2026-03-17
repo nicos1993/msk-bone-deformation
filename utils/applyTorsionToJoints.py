@@ -7,6 +7,7 @@ from .getOpenSimVersion import getOpenSimVersion
 from .orientation2MatRot import orientation2MatRot
 from .computeXYZAngleSeq import computeXYZAngleSeq
 from .computeSpatialTransformTranslations import computeSpatialTransformTranslations
+from .orientationRodrigues import orientationRodrigues
 import numpy as np
 
 def applyTorsionToJoints(osimModel, bone_to_deform, aStringAxis, torsion_angle_func_rad):
@@ -47,10 +48,12 @@ def applyTorsionToJoints(osimModel, bone_to_deform, aStringAxis, torsion_angle_f
     
     # compute the torsion matrix for proximal joint
     XYZ_location_vec =  np.array([location.get(0), location.get(1), location.get(2)])
+    
+    ref_loc_prox = XYZ_location_vec[axis_ind]
 
     # NOTE: no need to check for CustomJoint here, as the child is not affected
     # by the SpatialTransform, which moves the child wrt the parent.
-    tors_angle = torsion_angle_func_rad(XYZ_location_vec[axis_ind])
+    tors_angle = torsion_angle_func_rad(XYZ_location_vec[axis_ind] - ref_loc_prox) # subtract the offset if none zero => otherwise some 'torsion' at the proxJoint location which I don't think is intended...
     torsion_RotMat = aRotMatFunc(tors_angle[0])
     print('    torsion of ', str(tors_angle[0]*180/np.pi), ' deg applied.')
 
@@ -64,6 +67,11 @@ def applyTorsionToJoints(osimModel, bone_to_deform, aStringAxis, torsion_angle_f
     jointRotMat = orientation2MatRot(XYZ_orient_vec)
     newJointRotMat =  jointRotMat @ torsion_RotMat
     new_Orientation  = computeXYZAngleSeq(newJointRotMat)
+    newOrientation = osim.Vec3(new_Orientation[0], new_Orientation[1], new_Orientation[2])
+
+    R_Rod = orientationRodrigues(jointRotMat, axis_ind, tors_angle) 
+    R_final = jointRotMat @ R_Rod
+    new_Orientation = computeXYZAngleSeq(R_final)
     newOrientation = osim.Vec3(new_Orientation[0], new_Orientation[1], new_Orientation[2])
 
     # assign params
@@ -110,7 +118,7 @@ def applyTorsionToJoints(osimModel, bone_to_deform, aStringAxis, torsion_angle_f
         if curDistJoint.getConcreteClassName() == 'CustomJoint':
             # offset from the spatial transform
             # this is in parent, which is the bone of interest
-            jointOffset = computeSpatialTransformTranslations(osimModel, curDistJoint);
+            jointOffset = computeSpatialTransformTranslations(osimModel, curDistJoint)
             print('    spatialTransf-transl   : ', f"{jointOffset[0]:.2f} {jointOffset[1]:.2f} {jointOffset[2]:.2f}")
             print('    location in parent (initSystem) : ', f"{jointOffset[0]:.2f} {jointOffset[1]:.2f} {jointOffset[2]:.2f}")
         
@@ -118,7 +126,7 @@ def applyTorsionToJoints(osimModel, bone_to_deform, aStringAxis, torsion_angle_f
         XYZ_location_torsion = XYZ_location_vec+jointOffset
 
         # actually compute the matrix
-        tors_angle = torsion_angle_func_rad(XYZ_location_torsion[axis_ind])
+        tors_angle = torsion_angle_func_rad(XYZ_location_torsion[axis_ind] - ref_loc_prox) # subtract the offset if none zero => otherwise 'torsion' at the distalJoint location does not match desired 'torsion' bound
         torsion_RotMat = aRotMatFunc(tors_angle[0])
         print('    torsion of ', str(tors_angle[0]*180/np.pi), ' deg applied.')
 
@@ -129,9 +137,33 @@ def applyTorsionToJoints(osimModel, bone_to_deform, aStringAxis, torsion_angle_f
         # compute new orientation in parent
         XYZ_orient_vec = np.array([orientation.get(0), orientation.get(1), orientation.get(2)])
         jointRotMat = orientation2MatRot(XYZ_orient_vec)
+        
         newJointRotMat =  jointRotMat @ torsion_RotMat
-        new_OrientationInPar  = computeXYZAngleSeq(newJointRotMat)
+        new_OrientationInPar_old  = computeXYZAngleSeq(newJointRotMat)
+        newOrientationInParent_old = osim.Vec3(new_OrientationInPar_old[0], new_OrientationInPar_old[1], new_OrientationInPar_old[2])
+
+        # get the axis of rotation in the local frame of the body
+        #body_vert_in_local = jointRotMat[axis_ind,:]
+        #tors_angle
+        # separate the components of the axis of rotation in the local frame of the body 
+        #ux, uy, uz = body_vert_in_local[0], body_vert_in_local[1], body_vert_in_local[2]
+        # identity matrix for Rodrigues' formula
+        #I = np.eye(3)
+        # skew-symmetric matrix for Rodrigues' formula
+        #K = np.array([
+        #    [0, -uz, uy],
+        #    [uz, 0, -ux],
+        #    [-uy, ux, 0]
+        #    ])
+        # compute the rotation matrix using Rodrigues' formula
+        #R_rod = I + np.sin(tors_angle) * K + (1 - np.cos(tors_angle)) * (K @ K)
+        
+        R_Rod = orientationRodrigues(jointRotMat, axis_ind, tors_angle)
+        
+        R_final = jointRotMat @ R_Rod
+        new_OrientationInPar = computeXYZAngleSeq(R_final)
         newOrientationInParent = osim.Vec3(new_OrientationInPar[0], new_OrientationInPar[1], new_OrientationInPar[2])
+
 
         # assign new parameters
         if OpenSimVersion<4.0:
