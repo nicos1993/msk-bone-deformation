@@ -13,3 +13,9 @@ from .applyTorsionToMarkers import applyTorsionToMarkers
 from .saveDeformedModel import saveDeformedModel
 from .applyTorsionToWrappingSurface import applyTorsionToWrappingSurface    
 from .applyAngulationToJoints import applyAngulationToJoints
+
+from .createNeckShaftProfile import createNeckShaftProfile
+from .applyValgusVarusToJoints import applyValgusVarusToJoints
+from .applyValgusVarusToVTPGeometry import applyValgusVarusToVTPGeometry
+from .applyValgusVarusToMuscleAttachments import applyValgusVarusToMuscleAttachments
+from .applyValgusVarusToMarkers import applyValgusVarusToMarkers
